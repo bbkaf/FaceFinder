@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var previewView: PreviewView!
     
-    var devicePosition:AVCaptureDevice.Position = .back
+    var devicePosition:AVCaptureDevice.Position = .front
     
     @IBOutlet weak var faceCounts: UILabel! {
         didSet {
@@ -138,9 +138,9 @@ class ViewController: UIViewController {
         do {
             var defaultVideoDevice: AVCaptureDevice?
             
-            if let dualCamraDevice = AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInDualCamera, for: AVMediaType.video, position: AVCaptureDevice.Position.back) {
+            if let dualCamraDevice = AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInDualCamera, for: AVMediaType.video, position: AVCaptureDevice.Position.front) {
                 defaultVideoDevice = dualCamraDevice
-            } else if let backCameraDevice = AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: AVMediaType.video, position: AVCaptureDevice.Position.back) {
+            } else if let backCameraDevice = AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: AVMediaType.video, position: AVCaptureDevice.Position.front) {
                 defaultVideoDevice = backCameraDevice
             } else if let frontCamera = AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: AVMediaType.video, position: AVCaptureDevice.Position.front) {
                 defaultVideoDevice = frontCamera
@@ -257,7 +257,7 @@ extension ViewController {
                     if let ciImage = Utility.shared.convertUIImageToCIImage(uiImage: self.testUIImage!) {
                         if let cropedFaceImage = self.corpFaceCIImage(with: ciImage, bounds: faceRect)?.resize(newWidth: self.dstWidth) {
                             print(cropedFaceImage.size)
-                            //DataCenter.shared.cropedFaces.append(FaceDetail(cropedFaces: cropedFaceImage, name: "\(DataCenter.shared.cropedFaces.count)"))
+                            DataCenter.shared.cropedFaces.append(FaceDetail(cropedFaces: cropedFaceImage, name: "\(DataCenter.shared.cropedFaces.count)"))
                             UIImageWriteToSavedPhotosAlbum(cropedFaceImage, nil, nil, nil)
                             self.faceCounts.text = "\(DataCenter.shared.cropedFaces.count)"
                             print("fetch \(DataCenter.shared.cropedFaces.count) faces")
